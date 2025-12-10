@@ -23,7 +23,13 @@ flags: compiler
 setenv: CAML_LD_LIBRARY_PATH = "%{lib}%/stublibs"
 build: [
   ["tar" "-xf" "init-compiler.tar.gz"]
-  ["tar" "-xf" "init-dune.tbz"]
+  [
+    "sh" "-exc" "
+    tar -xf init-dune.tbz
+    # GitHub extracts to dune-<branch>/, but build expects dune-3.20.2
+    extracted=$(tar -tf init-dune.tbz | head -1 | cut -d/ -f1)
+    mv \"$extracted\" dune-3.20.2"
+  ]
   ["tar" "-xf" "init-menhir.tar.gz"]
   [
     "sh"
@@ -78,9 +84,9 @@ extra-source "init-compiler.tar.gz" {
 }
 extra-source "init-dune.tbz" {
   src:
-    "https://github.com/ocaml/dune/releases/download/3.20.2/dune-3.20.2.tbz"
+    "https://github.com/Alizter/dune/archive/push-ysnonzkmwzym.tar.gz"
   checksum: [
-    "sha256=b1a86b2d60bdb4a8b9bb6861bdf2f9f28a6e7cb5d833ce81afecceb9ef9ca549"
+    "sha256=19c0b4d009727c565a1daf270250597b4dc52986b5f4a53f6ddf70d7b1f6ad1e"
   ]
 }
 extra-source "init-menhir.tar.gz" {
